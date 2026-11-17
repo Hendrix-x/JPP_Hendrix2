@@ -1,0 +1,39 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PlayerController : MonoBehaviour
+{
+    public InputAction moveAction;
+    public Vector2 moveInput;
+    public GameObject ProjectilePrefab;
+    public InputAction fireAction;
+    public float speed = 10.0f;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        moveAction.Enable();
+        fireAction.Enable();
+    }
+    public float xRange = 10.0f;
+    // Update is called once per frame
+    void Update()
+    {
+        moveInput = moveAction.ReadValue<Vector2>();
+        if (transform.position.x < -xRange)
+        {
+            transform.position = new Vector3(-xRange, transform.position.y, transform.position.z);
+        }
+        if (transform.position.x > xRange)
+        {
+            transform.position = new Vector3(xRange, transform.position.y, transform.position.z);
+        }
+
+        moveInput = moveAction.ReadValue<Vector2>();
+        transform.Translate(Vector3.right * moveInput.x * Time.deltaTime * speed);
+        
+        if (fireAction.triggered)
+        {
+            Instantiate(ProjectilePrefab, transform.position, ProjectilePrefab.transform.rotation);
+        }
+    }
+}
