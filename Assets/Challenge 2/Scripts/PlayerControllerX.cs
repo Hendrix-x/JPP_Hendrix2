@@ -5,6 +5,8 @@ public class PlayerControllerX : MonoBehaviour
 {
     public GameObject dogPrefab;
     public InputAction fireAction;
+    public bool canDog = true;
+    public float cooldown = 2f;
 
     // Start is called before the first frame update
     void Start()
@@ -18,7 +20,17 @@ public class PlayerControllerX : MonoBehaviour
         // On spacebar press, send dog
         if (fireAction.triggered)
         {
-            Instantiate(dogPrefab, transform.position, dogPrefab.transform.rotation);
+            if (canDog)
+            {
+                Instantiate(dogPrefab, transform.position, dogPrefab.transform.rotation);
+                canDog = false;
+                Invoke("enableAction", cooldown);
+            }
         }
+    }
+
+    void enableAction()
+    {
+        canDog = true;
     }
 }
